@@ -16,8 +16,14 @@ access_token_secret = os.getenv("access-token-secret")
 bearer_token = os.getenv("bearer-token")
 
 
+import os
+
 def mi_csv_con_musica():
-    df = pd.read_csv("data_pruned.csv")
+    # Obtiene la ruta del directorio actual del script
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    # Une la ruta del directorio con el nombre del archivo
+    file_path = os.path.join(dir_path, "data_pruned.csv")
+    df = pd.read_csv(file_path)
     return df
 
 def build_spotify_url(df):
