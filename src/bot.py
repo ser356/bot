@@ -1,32 +1,30 @@
+import os
 import random
 import requests
 from requests_oauthlib import OAuth1
-import os
 import pandas as pd
-
 import dotenv
-
-import matplotlib.pyplot as plt
-import numpy as np
-import random
-import base64
-
-
 from sierpinski.sierpinski import plot_sierpinski
 
-
-
-
 dotenv.load_dotenv()
-
 
 consumer_key = os.getenv("api-key")
 consumer_secret = os.getenv("api-secret-key")
 access_token = os.getenv("access-token")
 access_token_secret = os.getenv("access-token-secret")
-bearer_token = os.getenv("bearer-token")
 
+def upload_image(auth, image_path):
+    url = "https://upload.twitter.com/1.1/media/upload.json"
 
+    with open(image_path, "rb") as image_file:
+        files = {"media": image_file}
+
+    response = requests.post(url, auth=auth, files=files)
+    response.raise_for_status()
+
+    media_id = response.json()["media_id_string"]
+
+    return media_id
 
 
 
@@ -37,56 +35,38 @@ def mi_csv_con_musica():
     return df
 
 def build_spotify_url(df):
-    # get random row and append id to url
     random_row = df.sample()
     track_id = random_row["id"].values[0]
     url = f"https://open.spotify.com/track/{track_id}"
     return url
 
 def connect_to_oauth(consumer_key, consumer_secret, access_token, access_token_secret):
-    url = "https://api.twitter.com/2/tweets"
+    url = "https://api.twitter.com/1.1/statuses/update.json"
     auth = OAuth1(consumer_key, consumer_secret, access_token, access_token_secret)
     return url, auth
-
-
-
-
-
 
 def build_content():
     nivel = random.randint(1, 10)
     plot_sierpinski(nivel)
-    with open("sierpinski.png", "rb") as img_file:
-        encoded_string = base64.b64encode(img_file.read()).decode('utf-8')
     url = build_spotify_url(mi_csv_con_musica())
-    payload = {
-        "text": url,
-        "media": encoded_string
-    }
-    return payload  
-
-
+    return url
 
 def main():
-    
-    
+    auth = OAuth1(consumer_key, consumer_secret, access_token, access_token_secret)
     content = build_content()
     greeting = pd.read_csv("greeting.csv")
-    
+    media_id = upload_image(auth, "sierpinski.png")
     payload = {
-        "status": ' '.join(map(str, greeting.sample(n=1).values[0]))+" "+content["text"],
-        "media": content["media"]
+        "status": ' '.join(map(str, greeting.sample(n=1).values[0])) + " " + content,
+        "media_ids": media_id
     }
     url, auth = connect_to_oauth(
         consumer_key, consumer_secret, access_token, access_token_secret
     )
     response = requests.post(
-        auth=auth, url=url, json=payload
+        auth=auth, url=url, params=payload
     )
-    
     print(response.json())
-
 
 if __name__ == "__main__":
     main()
-
