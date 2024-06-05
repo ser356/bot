@@ -32,7 +32,7 @@ bearer_token = os.getenv("bearer-token")
 
 def mi_csv_con_musica():
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    file_path = os.path.join(dir_path, "datasets/data_pruned.csv")
+    file_path = os.path.join(dir_path, "data_pruned.csv")
     df = pd.read_csv(file_path)
     return df
 
@@ -71,12 +71,10 @@ def main():
     
     
     content = build_content()
-    greeting = pd.read_csv("datasets/greeting.csv")
+    greeting = pd.read_csv("greeting.csv")
     
     payload = {
-        
-        
-        "status": greeting.sample(n=1).values[0]+" "+content["text"],
+        "status": ' '.join(map(str, greeting.sample(n=1).values[0]))+" "+content["text"],
         "media": content["media"]
     }
     url, auth = connect_to_oauth(
