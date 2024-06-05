@@ -32,7 +32,7 @@ bearer_token = os.getenv("bearer-token")
 
 def mi_csv_con_musica():
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    file_path = os.path.join(dir_path, "dataset/data_pruned.csv")
+    file_path = os.path.join(dir_path, "datasets/data_pruned.csv")
     df = pd.read_csv(file_path)
     return df
 
