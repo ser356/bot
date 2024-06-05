@@ -9,6 +9,13 @@ import dotenv
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+import base64
+
+
+from sierpinski.sierpinski import plot_sierpinski
+
+
+
 
 dotenv.load_dotenv()
 
@@ -21,44 +28,11 @@ bearer_token = os.getenv("bearer-token")
 
 
 
-def sierpinski(n):
-    """ Genera los puntos del triángulo de Sierpinski. """
-    if n == 0:
-        return np.array([[0, 0], [1, 0], [0.5, np.sqrt(3)/2]])
-    else:
-        prev_points = sierpinski(n - 1)
-        top = (prev_points + np.array([0.5, np.sqrt(3)/2])) / 2
-        left = (prev_points + np.array([0, 0])) / 2
-        right = (prev_points + np.array([1, 0])) / 2
-        return np.concatenate([left, top, right])
-def random_color():
-    idx = random.randint(0, 2)
-    color = [0, 0, 0]
-    color[idx] = random.choice([random.uniform(0, 0.3), random.uniform(0.7, 1)])
-    color[(idx+1)%3] = random.random()
-    color[(idx+2)%3] = random.random()
-    return tuple(color)
-
-
-def plot_sierpinski(n):
-    """ Dibuja el triángulo de Sierpinski de nivel n. """
-    points = sierpinski(n)
-    fig = plt.figure(figsize=(6, 6))
-    ax = fig.add_subplot(111)
-    ax.set_facecolor('black')
-    for i in range(len(points)):
-        plt.fill(points[i:i+2, 0], points[i:i+2, 1], color=random_color())
-    plt.axis('equal')
-    plt.axis('off')
-    plt.savefig("sierpinski.png")
-
 
 
 def mi_csv_con_musica():
-    # Obtiene la ruta del directorio actual del script
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    # Une la ruta del directorio con el nombre del archivo
-    file_path = os.path.join(dir_path, "data_pruned.csv")
+    file_path = os.path.join(dir_path, "dataset/data_pruned.csv")
     df = pd.read_csv(file_path)
     return df
 
@@ -74,7 +48,10 @@ def connect_to_oauth(consumer_key, consumer_secret, access_token, access_token_s
     auth = OAuth1(consumer_key, consumer_secret, access_token, access_token_secret)
     return url, auth
 
-import base64
+
+
+
+
 
 def build_content():
     nivel = random.randint(1, 10)
@@ -88,10 +65,18 @@ def build_content():
     }
     return payload  
 
+
+
 def main():
+    
+    
     content = build_content()
+    greeting = pd.read_csv("datasets/greeting.csv")
+    
     payload = {
-        "status": content["text"],
+        
+        
+        "status": greeting.sample(n=1).values[0]+" "+content["text"],
         "media": content["media"]
     }
     url, auth = connect_to_oauth(
@@ -106,3 +91,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
