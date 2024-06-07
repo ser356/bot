@@ -56,5 +56,5 @@ def create_image():
         # Draw the text
         d.text(position, line, fill=color, font=font)
 
-    return img
+    return img , quote, author
 

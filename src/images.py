@@ -42,7 +42,7 @@ def post_image():
     client_v2 = get_twitter_conn_v2(api_key, api_secret, access_token, access_token_secret)
 
 
-    img = create_image()
+    img, quote , author  = create_image()
     # Crear un objeto BytesIO
     byte_stream = io.BytesIO()
 
@@ -54,7 +54,7 @@ def post_image():
     media = client_v1.media_upload(filename="temp.png", file=byte_stream)
     media_id = media.media_id
 
-    client_v2.create_tweet(text="", media_ids=[media_id])
+    client_v2.create_tweet(text=quote+"\n"+author, media_ids=[media_id])
 
 if __name__ == "__main__":
     post_image()
