@@ -55,6 +55,7 @@ def main():
     auth = OAuth1(consumer_key, consumer_secret, access_token, access_token_secret)
     content = build_content()
     greeting = pd.read_csv("greeting.csv")
+    greeting = greeting.drop_duplicates()
     # media_id = upload_image(auth, "sierpinski.png")
     payload = {
         "text": ' '.join(map(str, greeting.sample(n=1).values[0])) + " " + content,
