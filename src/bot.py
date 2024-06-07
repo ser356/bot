@@ -20,9 +20,9 @@ def bot():
     logging.info(response.json())
     if response.status_code != 201:
         logging.error(response.json())
-        raise ValueError("Request failed...Exiting"+response.status_code)
+        raise ValueError("Request failed...Exiting"+str(response.status_code))
     else:
-        logging.info("Tweet posted...Exiting"+response.status_code)
+        logging.info("Tweet posted...Exiting"+str(response.status_code))
             
 
 def main():
