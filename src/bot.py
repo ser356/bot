@@ -11,22 +11,27 @@ def bot():
     payload = {
         "text": greeting + " " + content,
     }
-    url, auth = connect_to_oauth(
+    auth = connect_to_oauth(
         **credentials
     )
     response = requests.post(
-        auth=auth, url=url, json=payload
+        auth=auth, url="https://api.twitter.com/2/tweets", json=payload
     )
     logging.info(response.json())
     if response.status_code != 201:
         logging.error(response.json())
-        raise ValueError("Request failed...Exiting"+response.status_code)
+        raise ValueError("Request failed...Exiting "+str(response.status_code))
     else:
-        logging.info("Tweet posted...Exiting"+response.status_code)
+        logging.info("Tweet posted...Exiting "+str(response.status_code))
             
 
-def main():
-    bot()
 
+
+def test_bot():
+    get_credentials()
+    get_greeting()
+    build_content()
+    
+    
 if __name__ == "__main__":
-    main()
+    bot()
