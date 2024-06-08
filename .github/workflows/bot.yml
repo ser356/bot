@@ -23,7 +23,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run bot script
-      run: cd src && python bot.py
+      run: cd src && python main.py
       env:
         api-key: ${{ secrets.API_KEY }}
         api-secret-key: ${{ secrets.API_SECRET_KEY }}
