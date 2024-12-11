@@ -1,5 +1,6 @@
 name: Run bot script
 
+
 on:
   schedule:
     - cron: '0 * * * *'
