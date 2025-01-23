@@ -9,7 +9,7 @@ def bot():
     content = build_content()
     greeting = get_greeting()
     payload = {
-        "text": greeting + " " + content,
+        "text": "Elon NAZI DE MIERDA",
     }
     auth = connect_to_oauth(
         **credentials
