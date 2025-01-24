@@ -234,9 +234,8 @@ def bot():
     # get random insult
     insult = random.choice(list)
     # build tweet
-    tweet = greeting + " " + content + " " + insult
     payload = {
-        "text": "Elon"+tweet+"de mierda"
+        "text": "Elon"+insult+" de mierda"
     }
     auth = connect_to_oauth(
         **credentials
